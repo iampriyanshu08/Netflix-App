@@ -1,4 +1,4 @@
-const key = 'afb2d92e99905efb2f3026d8273a14f2'
+const key = import.meta.env.VITE_IMDB_API_KEY
 
 
 const requests = {

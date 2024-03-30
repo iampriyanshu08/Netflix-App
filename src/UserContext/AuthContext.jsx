@@ -1,5 +1,5 @@
 import { createContext, useEffect, useContext, useState } from "react";
-import { auth } from "../Firebase/Firebase";
+import { auth, db } from "../Firebase/Firebase";
 
 import {
   createUserWithEmailAndPassword,
@@ -7,13 +7,17 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
- const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setuser] = useState();
   const SignUp = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+     createUserWithEmailAndPassword(auth, email, password);
+     setDoc(doc(db,'users',email),{
+      savedMovies :[],
+     })
   };
   const LogOut = () => {
     return signOut(auth);
@@ -31,19 +35,12 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={ {SignUp, user,LogIn,LogOut} }>
+    <AuthContext.Provider value={{ SignUp, user, LogIn, LogOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-
-
-export function UserAuth (){
-  return useContext(AuthContext)
+export function UserAuth() {
+  return useContext(AuthContext);
 }
-
-
-
-
-
